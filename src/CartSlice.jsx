@@ -16,7 +16,8 @@ export const CartSlice = createSlice({
         }
     },
     removeItem: (state, action) => {
-        state.items = state.items.filter(item => item.name !== action.payload);
+        const itemName = action.payload.name;
+        state.items = state.items.filter(item => item.name !== itemName);
     },
     updateQuantity: (state, action) => {
         const { name, quantity } = action.payload; // Destructure the product name and new quantity from the action payload
@@ -27,9 +28,23 @@ export const CartSlice = createSlice({
         }
     
     },
+    incrementQuantity: (state, action) => {
+        const name = action.payload.name;
+        const existingItem = state.items.find((item) => item.name === name);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        }
+      },
+      decrementQuantity: (state, action) => {
+        const name = action.payload.name;
+        const existingItem = state.items.find((item) => item.name === name);
+        if (existingItem) {
+          existingItem.quantity = Math.max(1, existingItem.quantity - 1);
+        }
+      },
   },
 });
 
-export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
+export const { addItem, removeItem, updateQuantity, incrementQuantity, decrementQuantity } = CartSlice.actions;
 
 export default CartSlice.reducer;
